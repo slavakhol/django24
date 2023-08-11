@@ -15,7 +15,7 @@ class User(AbstractUser):
 class Course(models.Model):
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
-    image = models.ImageField(upload_to="images/courses", verbose_name="изображение")
+    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
 
     def __str__(self):
         return f'{self.title}'
@@ -27,7 +27,7 @@ class Course(models.Model):
 class Lesson(models.Model):
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
-    image = models.ImageField(upload_to="images/courses", verbose_name="изображение")
+    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
     link = models.URLField( verbose_name="ссылка")
 
     def __str__(self):
