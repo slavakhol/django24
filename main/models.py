@@ -12,18 +12,6 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-class Course(models.Model):
-    title = models.CharField(max_length=50, verbose_name="название")
-    description = models.CharField(max_length=200, verbose_name="описание")
-    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
-
-    def __str__(self):
-        return f'{self.title}'
-
-    class Meta:
-        verbose_name = "курс"
-        verbose_name_plural = "курсы"
-
 class Lesson(models.Model):
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
@@ -36,3 +24,18 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "урок"
         verbose_name_plural = "уроки"
+
+class Course(models.Model):
+    title = models.CharField(max_length=50, verbose_name="название")
+    description = models.CharField(max_length=200, verbose_name="описание")
+    lessons = models.ForeignKey(Lesson, verbose_name='уроки',
+                                   on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
+
+    def __str__(self):
+        return f'{self.title}'
+
+    class Meta:
+        verbose_name = "курс"
+        verbose_name_plural = "курсы"
+
