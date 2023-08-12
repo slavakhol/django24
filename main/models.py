@@ -12,30 +12,51 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
-class Lesson(models.Model):
-    title = models.CharField(max_length=50, verbose_name="название")
-    description = models.CharField(max_length=200, verbose_name="описание")
-    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
-    link = models.URLField( verbose_name="ссылка")
-
-    def __str__(self):
-        return f'{self.title}'
-
-    class Meta:
-        verbose_name = "урок"
-        verbose_name_plural = "уроки"
 
 class Course(models.Model):
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
-    lessons = models.ForeignKey(Lesson, verbose_name='уроки',
-                                   on_delete=models.CASCADE, null=True, blank=True)
     image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
 
     def __str__(self):
         return f'{self.title}'
 
     class Meta:
-        verbose_name = "курс"
-        verbose_name_plural = "курсы"
+        verbose_name = "Курс"
+        verbose_name_plural = "Курсы"
 
+class Lesson(models.Model):
+    title = models.CharField(max_length=50, verbose_name="название")
+    description = models.CharField(max_length=200, verbose_name="описание")
+    image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
+    link = models.URLField(null=True, blank=True, verbose_name="ссылка")
+    course = models.ForeignKey(Course, verbose_name='курс',
+                                on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.title}'
+
+    class Meta:
+        verbose_name = "Урок"
+        verbose_name_plural = "Уроки"
+
+class Payment(models.Model):
+    payment_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="пользователь")
+    payment_date = models.DateField(verbose_name="дата оплаты")
+    payment_amount = models.IntegerField(verbose_name="сумма")
+    payment_method = models.CharField(max_length=50, choices=[('cash', 'Наличные'), ('transfer', 'Перевод на счет')])
+    paid_lesson = models.ForeignKey(
+        Lesson, verbose_name='Оплаченный урок', on_delete=models.CASCADE,
+        null=True, blank=True, related_name='paid_lesson',
+    )
+    paid_course = models.ForeignKey(
+        Course, verbose_name='Оплаченный курс', on_delete=models.CASCADE,
+        null=True, blank=True, related_name='paid_course',
+    )
+
+    def __str__(self):
+        return f'{self.payment_date} - {self.payment_amount} - {self.payment_user}'
+
+    class Meta:
+        verbose_name = 'Платеж'
+        verbose_name_plural = 'Платежи'
