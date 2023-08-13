@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -14,6 +15,7 @@ class User(AbstractUser):
 
 
 class Course(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
     image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
@@ -26,6 +28,7 @@ class Course(models.Model):
         verbose_name_plural = "Курсы"
 
 class Lesson(models.Model):
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
     image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
