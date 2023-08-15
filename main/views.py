@@ -7,9 +7,10 @@ from main.permissions import IsOwner, IsModerator, NotModerator
 from main.serializers import CourseSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
 
 class CourseViewSet(viewsets.ModelViewSet):
+    '''ViewSet для модели Курс'''
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-    pagination_class = [MaterialPaginator]
+    pagination_class = MaterialPaginator
 
     def perform_create(self, serializer):
         new_course = serializer.save()
@@ -27,6 +28,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
+    '''Отображение для создания Урока'''
     serializer_class = LessonSerializer
     permission_classes = [NotModerator]
 
@@ -37,6 +39,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 
 
 class LessonListAPIView(generics.ListAPIView):
+    '''Отображение для вывода списка Уроков'''
     serializer_class = LessonSerializer
     pagination_class = MaterialPaginator
 
@@ -48,24 +51,28 @@ class LessonListAPIView(generics.ListAPIView):
         return Lesson.objects.filter(owner=user)
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
+    '''Отображение для вывода информации по одному Уроку'''
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner]
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):
+    '''Отображение для обновления Урока'''
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
+    '''Отображение для удаления Урока'''
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner]
 
 
 class PaymentListAPIView(generics.ListAPIView):
+    '''Отображение для вывода списка платежей'''
     serializer_class = PaymentSerializer
     queryset = Payment.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
@@ -74,8 +81,10 @@ class PaymentListAPIView(generics.ListAPIView):
 
 
 class SubscriptionCreateView(generics.CreateAPIView):
+    '''Отображение для создания Подписки'''
     serializer_class = SubscriptionSerializer
 
 class SubscriptionDeleteView(generics.DestroyAPIView):
+    '''Отображение для удаления Подписки'''
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()

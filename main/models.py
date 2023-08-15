@@ -19,7 +19,7 @@ class Course(models.Model):
     title = models.CharField(max_length=50, verbose_name="название")
     description = models.CharField(max_length=200, verbose_name="описание")
     image = models.ImageField(upload_to="images/courses", null=True, blank=True, verbose_name="изображение")
-
+    price = models.IntegerField(default=0, blank=True, null=True, verbose_name='стоимость')
     def __str__(self):
         return f'{self.title}'
 
