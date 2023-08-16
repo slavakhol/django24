@@ -5,12 +5,18 @@ from main.models import Course, Lesson, Payment, Subscription
 from main.paginators import MaterialPaginator
 from main.permissions import IsOwner, IsModerator, NotModerator
 from main.serializers import CourseSerializer, LessonSerializer, PaymentSerializer, SubscriptionSerializer
+from main.tasks import course_update_mail
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     '''ViewSet для модели Курс'''
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     pagination_class = MaterialPaginator
+
+    def perform_update(self, serializer):
+        updated_course = serializer.save()
+        course_update_mail(updated_course)
 
     def perform_create(self, serializer):
         new_course = serializer.save()
